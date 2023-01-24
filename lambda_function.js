@@ -1,0 +1,33 @@
+const sgMail = require('@sendgrid/mail');
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async event => {
+  console.log(`EVENT: ${JSON.stringify(event)}`);
+  for (const record of event.Records) {
+    console.log(record.eventID);
+    console.log(record.eventName);
+    console.log('DynamoDB Record: %j', record.dynamodb);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    // create email message
+    const msg = {
+        to: '<EMAIL_TO>',
+        from: '<EMAIL_FROM>',
+        subject: record.dynamodb.Subject,
+        text: record.dynamodb.Message,
+    };
+
+    // send email
+    try {
+        const response = await sgMail.send(msg);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+  }
+  return Promise.resolve('Successfully processed DynamoDB record');
+};
