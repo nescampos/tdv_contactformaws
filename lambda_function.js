@@ -21,14 +21,9 @@ exports.handler = async event => {
     };
 
     // send email
-    try {
-        const response = await sgMail.send(msg);
-        console.log(response);
-        return response;
-    } catch (error) {
-        console.log(error);
-        return error;
-    }
+    const response = await sgMail.send(msg);
+    console.log(response);
+    return response;
   }
   return Promise.resolve('Successfully processed DynamoDB record');
 };
