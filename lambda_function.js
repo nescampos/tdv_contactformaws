@@ -15,6 +15,7 @@ exports.handler = async event => {
     const msg = {
         to: '<EMAIL_TO>',
         from: '<EMAIL_FROM>',
+        replyTo: record.dynamodb.Email,
         subject: record.dynamodb.Subject,
         text: record.dynamodb.Message,
     };
